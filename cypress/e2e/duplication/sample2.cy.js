@@ -27,6 +27,7 @@ describe('Code duplication bad practice - repetitive tests', () => {
         .should('have.length', 100)
     })
   })
+  
   // it('searches for "reactjs"', () => {
   //   cy.search('reactjs{enter}')
 
