@@ -1,13 +1,22 @@
+/// <reference types="Cypress" />
 import { faker } from '@faker-js/faker'
 
 describe('Flaky tests bad practice', () => {
   beforeEach(() => {
+
+    cy.intercept(
+      'GET',
+      '**/search**'
+    ).as('getStories')
+
     cy.visit('https://wlsf82-hacker-stories.web.app')
 
-    cy.contains('p','Loading ...')
-      .should('be.visible')
-    cy.contains('p','Loading ...')
-      .should('not.exist')
+    cy.wait('@getStories')
+
+    // cy.contains('p','Loading ...')
+    //   .should('be.visible')
+    // cy.contains('p','Loading ...')
+    //   .should('not.exist')
   })
 
   Cypress._.times(10, () => {
@@ -16,10 +25,12 @@ describe('Flaky tests bad practice', () => {
         cy.search(faker.random.word())
       })
 
-      cy.contains('p','Loading ...')
-        .should('be.visible')
-      cy.contains('p','Loading ...')
-        .should('not.exist')
+    cy.wait('@getStories')
+      
+      // cy.contains('p','Loading ...')
+      //   .should('be.visible')
+      // cy.contains('p','Loading ...')
+      //   .should('not.exist')
 
       cy.get('.last-searches button')
         .should('have.length', 5)
